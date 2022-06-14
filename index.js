@@ -62,9 +62,9 @@ var resultsContainer;
  */
 function displayError(err) {
   let message = "";
-  ( err.code == 400 ) ? 
+  ( err.status == 400 ) ? 
   message = "Please specify the address better by adding more details such as zip code." :
-  message = err.message ;
+  message = err;
   resultsContainer = message;
 }
 
