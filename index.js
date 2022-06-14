@@ -1,4 +1,3 @@
-var API_KEY = "AIzaSyAJzRTiaQvUM6wvXV-rXYJJUMoh8czJgws";
 /**
    * Sample JavaScript code for civicinfo.representatives.representativeInfoByAddress
    * See instructions for running APIs Explorer code samples locally:
@@ -6,6 +5,7 @@ var API_KEY = "AIzaSyAJzRTiaQvUM6wvXV-rXYJJUMoh8czJgws";
    */
 
  function loadClient() {
+  var API_KEY = "AIzaSyAJzRTiaQvUM6wvXV-rXYJJUMoh8czJgws";
   gapi.client.setApiKey(API_KEY);
   return gapi.client.load("https://civicinfo.googleapis.com/$discovery/rest?version=v2")
       .then(function() { console.log("GAPI client loaded for API"); },
