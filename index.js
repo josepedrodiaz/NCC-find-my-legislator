@@ -14,6 +14,8 @@
 // Make sure the client is loaded before calling this method.
 function execute() {
   let address = document.getElementsByClassName("address");
+  console.log(address);
+  console.log(address.length);
   if (address.length < 1) {
       alert ('You must add an address');
       return;
