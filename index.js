@@ -23,3 +23,19 @@ function execute() {
             function(err) { console.error("Execute error", err); });
 }
 gapi.load("client");
+
+//Execute loadClient after load time
+if(window.attachEvent) {
+  window.attachEvent('onload', loadClient);
+} else {
+  if(window.onload) {
+      var curronload = window.onload;
+      var newonload = function(evt) {
+          curronload(evt);
+          loadClient(evt);
+      };
+      window.onload = newonload;
+  } else {
+      window.onload = loadClient;
+  }
+}
