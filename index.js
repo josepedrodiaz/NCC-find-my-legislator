@@ -76,5 +76,5 @@ function displayError(err) {
  */
  function revealForm() {
   document.getElementById("address").className = "visible";
-  document.getElementById("execute-search-btn").className = "visible
+  document.getElementById("execute-search-btn").className = "visible";
 }
