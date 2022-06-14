@@ -1,5 +1,5 @@
 console.log('Script Loaded');
-const API_KEY = "AIzaSyAJzRTiaQvUM6wvXV-rXYJJUMoh8czJgws";
+var API_KEY = "AIzaSyAJzRTiaQvUM6wvXV-rXYJJUMoh8czJgws";
 /**
    * Sample JavaScript code for civicinfo.representatives.representativeInfoByAddress
    * See instructions for running APIs Explorer code samples locally:
