@@ -6,11 +6,6 @@
 
  function loadClient() {
   let API_KEY = "AIzaSyAJzRTiaQvUM6wvXV-rXYJJUMoh8czJgws";
-  let address = document.getElementsByClassName("address");
-  if (address.length < 1) {
-      alert ('You must add an address');
-      return;
-  }
   gapi.client.setApiKey(API_KEY);
   return gapi.client.load("https://civicinfo.googleapis.com/$discovery/rest?version=v2")
       .then(function() { console.log("GAPI client loaded for API"); },
@@ -18,6 +13,12 @@
 }
 // Make sure the client is loaded before calling this method.
 function execute() {
+  let address = document.getElementsByClassName("address");
+  if (address.length < 1) {
+      alert ('You must add an address');
+      return;
+  }
+
   return gapi.client.civicinfo.representatives.representativeInfoByAddress({
     "address": address
   })
