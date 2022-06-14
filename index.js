@@ -36,7 +36,11 @@ function execute() {
   }
 
   return gapi.client.civicinfo.representatives.representativeInfoByAddress({
-    "address": address.value + " North Carolina, United States"
+    "address": address.value + " North Carolina, United States",
+    "roles": [
+      "legislatorUpperBody",
+      "legislatorLowerBody"
+    ]
   })
       .then(function(response) {
               // Handle the results here (response.result has the parsed body).
@@ -64,18 +68,14 @@ var resultsContainer;
  * Displays the error status in the frontend
  */
  function displayError(err) {
-  resultsContainer.innerHTML = err;
+  resultsContainer.innerHTML = "<p>" + err + "</p>";
 }
 
 /**
  * Displays the search results in the frontend
  */
  function displayResults(result) {
-   let normalizedInput = "Results for " + result.normalizedInput.line1;
-   normalizedInput += " " + result.normalizedInput.city;
-   normalizedInput += " " + result.normalizedInput.state;
-   normalizedInput += " (" + result.normalizedInput.zip + ")";
-  resultsContainer.innerHTML = normalizedInput;
+  resultsContainer.innerHTML = normalizedInput(result) + officials(result);
 }
 
 /**
@@ -85,4 +85,40 @@ var resultsContainer;
   document.getElementById("address").className = "visible";
   document.getElementById("execute-search-btn").className = "visible";
   document.getElementById("loader").className = "invisible";
+}
+
+/**
+ * Return normalized address
+ */
+function normalizedInput(result) {
+  let normalizedInput = "<br />Results for " + result.normalizedInput.line1;
+  normalizedInput += " " + result.normalizedInput.city;
+  normalizedInput += " " + result.normalizedInput.state;
+  normalizedInput += " (" + result.normalizedInput.zip + ")<br /><br /><br />";
+
+  return normalizedInput;
+}
+
+/**
+ * Return officials
+ */
+ function officials(result) {
+  let officials = result.officials;
+  let officials_html = "";
+
+  officials.forEach(official => {
+    console.log(official);
+    officials_html += "<p><b>" + official.name + "</b></p>";
+    officials_html += "<p>" + JSON.stringify(official.address) + "<br />";// + 
+    officials_html += JSON.stringify(official.urls) + "</p>";
+    // ", " + official.address.city + " " + official.address.state +
+    // " zip: " + official.address.zip + "</b><br />";
+
+    // officials.urls.forEach(url => {
+    //   officials_html += "<a href=\""+url+"\">" + url + "</a><br />";
+    // });
+    officials_html += "<hr />";
+  });
+
+  return officials_html;
 }
