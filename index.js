@@ -24,7 +24,7 @@ function loadClient() {
 let API_KEY = "AIzaSyAJzRTiaQvUM6wvXV-rXYJJUMoh8czJgws";
 gapi.client.setApiKey(API_KEY);
 return gapi.client.load("https://civicinfo.googleapis.com/$discovery/rest?version=v2")
-    .then(function() { console.log("GAPI client loaded for API"); },
+    .then(function() { console.log("GAPI client loaded for API"); revealForm(); },
           function(err) { console.error("Error loading GAPI client for API", err); });
 }
 // Make sure the client is loaded before calling this method.
@@ -36,14 +36,18 @@ function execute() {
   }
 
   return gapi.client.civicinfo.representatives.representativeInfoByAddress({
-    "address": address.value
+    "address": address.value + " North Carolina, United States"
   })
       .then(function(response) {
               // Handle the results here (response.result has the parsed body).
-              console.log("Response", response);
-              displayResults();
+              if(response.result.normalizedInput.zip) {
+                displayResults(response.result);
+                console.log("Response", response);
+              } else {
+                displayError("Please specify the address better by adding more details such as zip code.");
+              }
             },
-            function(err) { console.error("Execute error", err); displayError(err);});
+            function(err) { displayError(err.result.error.message); });
 }
 gapi.load("client");
 
@@ -53,22 +57,25 @@ var resultsContainer;
  */
  function init() {
   loadClient();
-  revealForm();
   resultsContainer = document.getElementById("results_container");
 }
 
 /**
  * Displays the error status in the frontend
  */
-function displayError(err) {
-  resultsContainer.innerHTML = err.message;
+ function displayError(err) {
+  resultsContainer.innerHTML = err;
 }
 
 /**
  * Displays the search results in the frontend
  */
- function displayResults(response) {
-  resultsContainer.innerHTML = response;
+ function displayResults(result) {
+   let normalizedInput = "Results for " + result.normalizedInput.line1;
+   normalizedInput += " " + result.normalizedInput.city;
+   normalizedInput += " " + result.normalizedInput.state;
+   normalizedInput += " (" + result.normalizedInput.zip + ")";
+  resultsContainer.innerHTML = normalizedInput;
 }
 
 /**
@@ -77,4 +84,5 @@ function displayError(err) {
  function revealForm() {
   document.getElementById("address").className = "visible";
   document.getElementById("execute-search-btn").className = "visible";
+  document.getElementById("loader").className = "invisible";
 }
