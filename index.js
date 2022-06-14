@@ -1,4 +1,3 @@
-console.log('Script Loaded');
 var API_KEY = "AIzaSyAJzRTiaQvUM6wvXV-rXYJJUMoh8czJgws";
 /**
    * Sample JavaScript code for civicinfo.representatives.representativeInfoByAddress
@@ -24,3 +23,4 @@ function execute() {
             function(err) { console.error("Execute error", err); });
 }
 gapi.load("client");
+loadClient();
