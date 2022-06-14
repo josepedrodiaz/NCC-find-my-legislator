@@ -23,4 +23,3 @@ function execute() {
             function(err) { console.error("Execute error", err); });
 }
 gapi.load("client");
-loadClient();
