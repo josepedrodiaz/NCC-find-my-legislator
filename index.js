@@ -61,11 +61,7 @@ var resultsContainer;
  * Displays the error status in the frontend
  */
 function displayError(err) {
-  let message = "";
-  ( err.status == 400 ) ? 
-  message = "Please specify the address better by adding more details such as zip code." :
-  message = err;
-  resultsContainer = message;
+  resultsContainer.innerHTML = err.message;
 }
 
 /**
