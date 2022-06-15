@@ -40,6 +40,9 @@ function execute() {
     "roles": [
       "legislatorUpperBody",
       "legislatorLowerBody"
+    ],
+    "levels": [
+      "administrativeArea1"
     ]
   })
       .then(function(response) {
