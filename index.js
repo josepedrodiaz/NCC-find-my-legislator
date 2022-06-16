@@ -36,7 +36,7 @@ function execute() {
   }
 
   return gapi.client.civicinfo.representatives.representativeInfoByAddress({
-    "address": address.value + " North Carolina, United States",
+    "address": address.value,
     "roles": [
       "legislatorUpperBody",
       "legislatorLowerBody"
@@ -48,8 +48,12 @@ function execute() {
       .then(function(response) {
               // Handle the results here (response.result has the parsed body).
               if(response.result.normalizedInput.zip) {
-                displayResults(response.result);
                 console.log("Response", response);
+                if(response.result.normalizedInput.state != "NC"){
+                  displayError("Searches are only supported for the state of North Carolina.");
+                }else{
+                  displayResults(response.result);
+                }
               } else {
                 displayError("Please specify the address better by adding more details such as zip code.");
               }
@@ -106,6 +110,12 @@ function normalizedInput(result) {
  * Return officials
  */
  function officials(result) {
+
+  if(!result.officials){
+    console.log("No officials found");
+    return "No officials found";
+  }
+
   let officials = result.officials;
   let officials_html = "";
 
