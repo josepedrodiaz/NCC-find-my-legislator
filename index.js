@@ -98,7 +98,8 @@ var resultsContainer;
  * Return normalized address
  */
 function normalizedInput(result) {
-  let normalizedInput = "<br />Results for " + result.normalizedInput.line1;
+  let normalizedInput = "<br /><h3 class=\"results-title\">Your Legislators</h3>";
+  normalizedInput += "Results for " + result.normalizedInput.line1;
   normalizedInput += " " + result.normalizedInput.city;
   normalizedInput += " " + result.normalizedInput.state;
   normalizedInput += " (" + result.normalizedInput.zip + ")<br /><br /><br />";
@@ -111,9 +112,8 @@ function normalizedInput(result) {
  */
  function officials(result) {
 
-  if(!result.officials){
-    console.log("No officials found");
-    return "No officials found";
+  if(!result.officials) {
+    return "No results found";
   }
 
   let officials = result.officials;
