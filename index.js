@@ -29,6 +29,9 @@ return gapi.client.load("https://civicinfo.googleapis.com/$discovery/rest?versio
 }
 // Make sure the client is loaded before calling this method.
 function execute() {
+  resultsContainer.innerHTML = "";
+  document.getElementById("loader").className = "lds-dual-ring visible";
+
   let address = document.getElementById("address");
   if (address.value.length < 1) {
       alert ('You must add an address');
@@ -48,7 +51,6 @@ function execute() {
       .then(function(response) {
               // Handle the results here (response.result has the parsed body).
               if(response.result.normalizedInput.zip) {
-                console.log("Response", response);
                 if(response.result.normalizedInput.state != "NC"){
                   displayError("Searches are only supported for the state of North Carolina.");
                 }else{
@@ -75,13 +77,15 @@ var resultsContainer;
  * Displays the error status in the frontend
  */
  function displayError(err) {
-  resultsContainer.innerHTML = "<p>" + err + "</p>";
+  document.getElementById("loader").className = "invisible";
+  resultsContainer.innerHTML = "<p class=\"error\">" + err + "</p>";
 }
 
 /**
  * Displays the search results in the frontend
  */
  function displayResults(result) {
+  document.getElementById("loader").className = "invisible";
   resultsContainer.innerHTML = normalizedInput(result) + officials(result);
 }
 
@@ -119,17 +123,17 @@ function normalizedInput(result) {
   let officials = result.officials;
   let officials_html = "";
 
-  officials.forEach(official => {
-    console.log(official);
-    officials_html += "<p><b>" + official.name + "</b></p>";
-    officials_html += "<p>" + JSON.stringify(official.address) + "<br />";// + 
-    officials_html += JSON.stringify(official.urls) + "</p>";
-    // ", " + official.address.city + " " + official.address.state +
-    // " zip: " + official.address.zip + "</b><br />";
+  console.log('========================');
+  console.log(result.offices);
+  console.log('========================');
 
-    // officials.urls.forEach(url => {
-    //   officials_html += "<a href=\""+url+"\">" + url + "</a><br />";
-    // });
+  officials.forEach(function (official, i) {
+    console.log(i);
+    console.log(official);
+    officials_html += "<p>Name: <b>" + official.name + "</b></p>";
+    officials_html += "<p>Img: <img src=\"" + official.photoUrl + "\" /></p>";
+    officials_html += "<p>Role: " + result.offices[i].roles[0] + "</p>";
+    officials_html += "<p>District: " + result.offices[i].divisionId + "</p>";
     officials_html += "<hr />";
   });
 
