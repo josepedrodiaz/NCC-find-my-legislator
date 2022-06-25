@@ -128,14 +128,28 @@ function normalizedInput(result) {
   console.log('========================');
 
   officials.forEach(function (official, i) {
-    console.log(i);
-    console.log(official);
     officials_html += "<p>Name: <b>" + official.name + "</b></p>";
     officials_html += "<p>Img: <img src=\"" + official.photoUrl + "\" /></p>";
-    officials_html += "<p>Role: " + result.offices[i].roles[0] + "</p>";
-    officials_html += "<p>District: " + result.offices[i].divisionId + "</p>";
+    officials_html += "<p>Role: " + returnRoleString(result.offices[i].roles[0]) + "</p>";
+    officials_html += "<p>District: " + returnDistrict(result.offices[i].divisionId) + "</p>";
     officials_html += "<hr />";
   });
 
   return officials_html;
+}
+
+/**
+ * This function returns the district number using as input 
+ * the division ID string returned by the Google Civic Information API
+ */
+ function returnDistrict(divisionId) {
+  return /[^:]*$/.exec(divisionId)[0];
+}
+
+/**
+ * This function returns the representative role string using as input 
+ * the raw role string returned by the Google Civic Information API
+ */
+function returnRoleString(roleStr) {
+  return (roleStr == 'legislatorUpperBody') ? 'Senator' : 'Deputy';
 }
