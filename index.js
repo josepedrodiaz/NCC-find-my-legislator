@@ -19,6 +19,14 @@ if(window.attachEvent) {
   }
 }
 
+/**
+ * Init App
+ */
+ function init() {
+  loadClient();
+  resultsContainer = document.getElementById("results_container");
+}
+
 //Load Client
 function loadClient() {
 let API_KEY = "AIzaSyAJzRTiaQvUM6wvXV-rXYJJUMoh8czJgws";
@@ -30,6 +38,7 @@ return gapi.client.load("https://civicinfo.googleapis.com/$discovery/rest?versio
 // Make sure the client is loaded before calling this method.
 function execute() {
   resultsContainer.innerHTML = "";
+  hideReps();
   document.getElementById("loader").className = "lds-dual-ring visible";
 
   let address = document.getElementById("address");
@@ -65,13 +74,7 @@ function execute() {
 gapi.load("client");
 
 var resultsContainer;
-/**
- * Init App
- */
- function init() {
-  loadClient();
-  resultsContainer = document.getElementById("results_container");
-}
+
 
 /**
  * Displays the error status in the frontend
@@ -86,7 +89,8 @@ var resultsContainer;
  */
  function displayResults(result) {
   document.getElementById("loader").className = "invisible";
-  resultsContainer.innerHTML = normalizedInput(result) + officials(result);
+  resultsContainer.innerHTML = normalizedInput(result);
+  console.log(officials(result));
 }
 
 /**
@@ -123,17 +127,23 @@ function normalizedInput(result) {
   let officials = result.officials;
   let officials_html = "";
 
-  console.log('========================');
-  console.log(result.offices);
-  console.log('========================');
+
+  let districts = [];
 
   officials.forEach(function (official, i) {
+    districts.push(returnDistrict(result.offices[i].divisionId));
     officials_html += "<p>Name: <b>" + official.name + "</b></p>";
     officials_html += "<p>Img: <img src=\"" + official.photoUrl + "\" /></p>";
     officials_html += "<p>Role: " + returnRoleString(result.offices[i].roles[0]) + "</p>";
     officials_html += "<p>District: " + returnDistrict(result.offices[i].divisionId) + "</p>";
     officials_html += "<hr />";
   });
+
+  console.log('========================');
+  console.log(districts);
+  console.log('========================');
+
+  revealReps(districts);
 
   return officials_html;
 }
@@ -152,4 +162,30 @@ function normalizedInput(result) {
  */
 function returnRoleString(roleStr) {
   return (roleStr == 'legislatorUpperBody') ? 'Senator' : 'Deputy';
+}
+
+/**
+ * This function reveal the representative div contents
+ * If is present in the API results
+ */
+function revealReps(districts) {
+  var reps = document.querySelector(".ga-members-list-wrapper .w-dyn-items").querySelectorAll(".ga-members-item"); 
+  reps.forEach(function(content) {
+    let memberDistrict = content.querySelector(".c-district").querySelector(".district-number").innerHTML;
+    if(districts.includes(memberDistrict)) {
+      content.style.display = "block";
+    }
+  });
+}
+
+
+/**
+ * This function hide the representative div contents
+ * to wait for a new results set
+ */
+ function hideReps() {
+  var reps = document.querySelector(".ga-members-list-wrapper .w-dyn-items").querySelectorAll(".ga-members-item"); 
+  reps.forEach(function(content) {
+    content.style.display = "none";
+  });
 }
