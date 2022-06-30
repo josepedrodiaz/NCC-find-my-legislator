@@ -89,7 +89,7 @@ var resultsContainer;
  */
  function displayResults(result) {
   document.getElementById("loader").className = "invisible";
-  resultsContainer.innerHTML = normalizedInput(result);
+  resultsContainer.innerHTML = (result.officials) ? normalizedInput(result): "No results found" ;
   console.log(officials(result));
 }
 
