@@ -89,7 +89,7 @@ var resultsContainer;
  */
  function displayResults(result) {
   document.getElementById("loader").className = "invisible";
-  resultsContainer.innerHTML = (result.officials) ? normalizedInput(result): "No results found" ;
+  (result.officials) ? resultsContainer.innerHTML = normalizedInput(result) + officials(result) : displayError("No results found");
   console.log(officials(result));
 }
 
@@ -130,14 +130,17 @@ function normalizedInput(result) {
 
   let districts = [];
 
+  officials_html += "<button onclick=\"toggleDebugInfo()\">Debug Info</button>";
+  officials_html += "<div id=\"debug_content\" style=\"display:none; backgroud-color:#eee\">";
+
   officials.forEach(function (official, i) {
     districts.push(returnDistrict(result.offices[i].divisionId));
     officials_html += "<p>Name: <b>" + official.name + "</b></p>";
-    officials_html += "<p>Img: <img src=\"" + official.photoUrl + "\" /></p>";
     officials_html += "<p>Role: " + returnRoleString(result.offices[i].roles[0]) + "</p>";
     officials_html += "<p>District: " + returnDistrict(result.offices[i].divisionId) + "</p>";
-    officials_html += "<hr />";
   });
+
+  officials_html += "</div>";
 
   console.log('========================');
   console.log(districts);
@@ -146,6 +149,18 @@ function normalizedInput(result) {
   revealReps(districts);
 
   return officials_html;
+}
+
+/**
+ * Show/Hide debug info box
+ */
+function toggleDebugInfo() {
+  var x = document.getElementById("debug_content");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
 }
 
 /**
