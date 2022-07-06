@@ -39,6 +39,7 @@ return gapi.client.load("https://civicinfo.googleapis.com/$discovery/rest?versio
 function execute() {
   resultsContainer.innerHTML = "";
   hideReps();
+  colorGrade();
   document.getElementById("loader").className = "lds-dual-ring visible";
 
   let address = document.getElementById("address");
@@ -202,5 +203,19 @@ function revealReps(districts) {
   var reps = document.querySelector(".ga-members-list-wrapper .w-dyn-items").querySelectorAll(".ga-members-item"); 
   reps.forEach(function(content) {
     content.style.display = "none";
+  });
+}
+
+/**
+ * This function color the representative grade
+ */
+ function colorGrade() {
+  var reps = document.querySelector(".ga-members-list-wrapper .w-dyn-items").querySelectorAll(".ga-members-item"); 
+  reps.forEach(function(content) {
+    let memberScoreContainer = content.querySelector(".link-block").querySelector(".ga-member-block").querySelector(".ga-member-score")
+    let memberGrade = memberScoreContainer.innerHTML;
+    if (memberGrade == 'A') {
+        memberScoreContainer.style.background = '#52A845';
+    }
   });
 }
